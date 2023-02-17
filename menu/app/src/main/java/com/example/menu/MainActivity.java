@@ -7,6 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,7 +20,7 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    private ActionMode actionMode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,8 +35,18 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Button btn_context_menu = findViewById(R.id.btn_context_menu);
-        ConstraintLayout manHinh = findViewById(R.id.manHinh);
         registerForContextMenu(btn_context_menu);
+
+        TextView textView = findViewById(R.id.text_view);
+        textView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (actionMode != null) return false;
+                actionMode = MainActivity.this.startActionMode(actionModeCallBack);
+                view.setSelected(true);
+                return true;
+            }
+        });
     }
 
     @Override
@@ -114,4 +125,38 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    public ActionMode.Callback actionModeCallBack = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+            getMenuInflater().inflate(R.menu.contextual_action_bar, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+            String message = menuItem.getTitle().toString();
+            switch (menuItem.getItemId()) {
+                case R.id.action_bar_delete:
+                case R.id.action_bar_share:
+                case R.id.action_bar_edit:
+                    Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                    intent.putExtra("message", "You clicked menu item " + message);
+                    startActivity(intent);
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode actionMode) {
+                actionMode = null;
+        }
+    };
 }
