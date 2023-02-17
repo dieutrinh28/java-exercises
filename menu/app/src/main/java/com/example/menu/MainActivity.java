@@ -2,15 +2,19 @@ package com.example.menu;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -28,6 +32,10 @@ public class MainActivity extends AppCompatActivity {
                 showPopupMenu(view);
             }
         });
+
+        Button btn_context_menu = findViewById(R.id.btn_context_menu);
+        ConstraintLayout manHinh = findViewById(R.id.manHinh);
+        registerForContextMenu(btn_context_menu);
     }
 
     @Override
@@ -81,7 +89,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.menu_contextual, menu);
+        menu.setHeaderTitle("Contextual menu");
 
 
+    }
 
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        String message = item.toString();
+        switch (item.getItemId()) {
+            case R.id.context_add:
+            case R.id.context_edit:
+            case R.id.context_delete:
+                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                intent.putExtra("message", "You clicked menu item " + message);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+
+    }
 }
