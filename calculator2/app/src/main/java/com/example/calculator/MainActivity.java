@@ -1,7 +1,9 @@
 package com.example.calculator;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -13,15 +15,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView resultTv, solutionTv;
     MaterialButton buttonAC, buttonCE, buttonBracketClose, buttonBracketOpen, buttonDot;
     MaterialButton buttonPlus, buttonMinus, buttonMultiply, buttonDivide, buttonEqual;
-    MaterialButton button0,button1,button2,button3,button4,button5,button6,button7,button8,button9;
-
+    MaterialButton button0,button1,button2,button3,button4,button5,button6,button7,button8,button9, btn_history;
+    String historyCalc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         resultTv = findViewById(R.id.tvResult);
         solutionTv = findViewById(R.id.tvSolution);
+
         assignId(buttonCE,R.id.button_ce);
         assignId(buttonAC,R.id.button_AC);
         assignId(buttonBracketClose,R.id.button_close_bracket);
@@ -42,29 +46,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         assignId(button7,R.id.button_7);
         assignId(button8,R.id.button_8);
         assignId(button9,R.id.button_9);
+        assignId(btn_history, R.id.btn_history);
 
     }
-    void assignId(MaterialButton btn,int id){
-        btn=findViewById(id);
+    void assignId(MaterialButton btn, int id){
+        btn = findViewById(id);
         btn.setOnClickListener(this);
     }
+
 
     @Override
     public void onClick(View view) {
         MaterialButton button = (MaterialButton) view;
         String buttonText = button.getText().toString();
         String dataCalculate = solutionTv.getText().toString();
-        if(buttonText.equals("AC")){
+        if(buttonText.equals("AC")) {
             solutionTv.setText("");
             resultTv.setText("0");
             return;
         }
         if(buttonText.equals("=")){
             solutionTv.setText(resultTv.getText());
+            historyCalc += dataCalculate.toString()+" = "+resultTv.getText().toString()+"/";
             return;
         }
-        if(buttonText.equals("CE"))
-        {
+        if(buttonText.equals("HISTORY")){
+            solutionTv.setText("");
+            Intent intent = new Intent(getApplicationContext(),HistoryActivity.class);
+            intent.putExtra("HISTORY",historyCalc);
+            startActivity(intent);
+            return;
+        }
+        if(buttonText.equals("CE")){
             dataCalculate = dataCalculate.substring(0, dataCalculate.length() - 1);
         }else{
             dataCalculate = dataCalculate+buttonText;
@@ -91,5 +104,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }catch (Exception e)
         {  return "Err";}
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        resultTv = findViewById(R.id.tvResult);
+        solutionTv = findViewById(R.id.tvSolution);
+        outState.putString("re", resultTv.getText().toString());
+        outState.putString("so", solutionTv.getText().toString());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        resultTv = findViewById(R.id.tvResult);
+        solutionTv = findViewById(R.id.tvSolution);
+        resultTv.setText(savedInstanceState.getString("re"));
+        solutionTv.setText(savedInstanceState.getString("so"));
     }
 }
