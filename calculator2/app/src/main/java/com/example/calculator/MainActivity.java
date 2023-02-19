@@ -67,20 +67,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         if(buttonText.equals("=")){
             solutionTv.setText(resultTv.getText());
-            historyCalc += dataCalculate.toString()+" = "+resultTv.getText().toString()+"/";
+            historyCalc += dataCalculate.toString() + " = "+ resultTv.getText().toString() + "/";
             return;
         }
         if(buttonText.equals("HISTORY")){
             solutionTv.setText("");
-            Intent intent = new Intent(getApplicationContext(),HistoryActivity.class);
-            intent.putExtra("HISTORY",historyCalc);
+            Intent intent = new Intent(this,HistoryActivity.class);
+            intent.putExtra("HISTORY", String.valueOf(historyCalc));
             startActivity(intent);
             return;
         }
         if(buttonText.equals("CE")){
             dataCalculate = dataCalculate.substring(0, dataCalculate.length() - 1);
         }else{
-            dataCalculate = dataCalculate+buttonText;
+            dataCalculate = dataCalculate + buttonText;
         }
 
         solutionTv.setText(dataCalculate);
@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
+        super.onRestoreInstanceState(savedInstanceState);
         resultTv = findViewById(R.id.tvResult);
         solutionTv = findViewById(R.id.tvSolution);
         resultTv.setText(savedInstanceState.getString("re"));

@@ -16,13 +16,19 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        Intent intent = getIntent();
-        String history = intent.getStringExtra("HISTORY");
-
         textView = findViewById(R.id.txt_history);
-        textView.setText("this is" + history);
+        Intent intent = getIntent();
+        String result = intent.getStringExtra("HISTORY");
 
-
+//        String history = intent.getStringExtra("HISTORY");
+//        textView.setText(history);
+        result = result.replace("null","");
+        String[] fnresult = result.split("/");
+        StringBuilder sb = new StringBuilder();
+        for (String s : fnresult) {
+            sb.append(s).append("\n");
+        }
+        textView.setText(sb.toString());
     }
 
     @Override
