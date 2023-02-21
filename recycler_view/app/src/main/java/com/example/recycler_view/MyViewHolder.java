@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class MyViewHolder extends RecyclerView.ViewHolder {
 
     public ImageView mImageView;
     public TextView mTitleView;
@@ -18,9 +18,6 @@ public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClic
         mTitleView = itemView.findViewById(R.id.item_title);
         mTextView = itemView.findViewById(R.id.item_text);
 
-        itemView.setOnClickListener(this);
     }
-    public void onClick(View view) {
 
-    }
 }

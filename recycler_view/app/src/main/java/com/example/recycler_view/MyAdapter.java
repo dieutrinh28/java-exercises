@@ -3,6 +3,8 @@ package com.example.recycler_view;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,9 +13,11 @@ import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
     final private List<MyItem> itemList;
+    private OnItemClickListener listener;
 
-    public MyAdapter(List<MyItem> itemList) {
+    public MyAdapter(List<MyItem> itemList, OnItemClickListener listener) {
         this.itemList = itemList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -33,6 +37,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         holder.mImageView.setImageResource(item.getImageResId());
         holder.mTitleView.setText(item.getTitle());
         holder.mTextView.setText(item.getText());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(listener != null) {
+                    listener.onItemClick(item);
+                }
+            }
+        });
+
     }
 
     @Override
@@ -42,4 +55,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         }
         return 0;
     }
+
+    public interface OnItemClickListener {
+        void onItemClick(MyItem myItem);
+    }
+
 }
