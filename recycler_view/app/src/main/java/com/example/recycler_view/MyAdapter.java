@@ -26,6 +26,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         MyItem item = itemList.get(position);
+        if (item == null) {
+            return;
+        }
+
         holder.mImageView.setImageResource(item.getImageResId());
         holder.mTitleView.setText(item.getTitle());
         holder.mTextView.setText(item.getText());
@@ -33,6 +37,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        if (itemList != null) {
+            return itemList.size();
+        }
+        return 0;
     }
 }

@@ -11,9 +11,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
-    MyAdapter adapter;
-    List<MyItem> itemList = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private MyAdapter adapter;
+
 
 
     @Override
@@ -21,6 +21,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
+        recyclerView = findViewById(R.id.recyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        adapter = new MyAdapter(getItemList());
+        recyclerView.setAdapter(adapter);
+
+    }
+
+    private List<MyItem> getItemList() {
+        List<MyItem> itemList = new ArrayList<>();
         MyItem myItem1 = new MyItem(R.drawable.champagne_toast, "Champagne Toast", "sweet notes of peach, nectarine, and vanilla");
         MyItem myItem2 = new MyItem(R.drawable.a_thousand_wishes, "A Thousand Wishes", "sweet notes of peach, nectarine, and vanilla");
         MyItem myItem3 = new MyItem(R.drawable.gingham, "Gingham", "sweet notes of peach, nectarine, and vanilla");
@@ -35,12 +48,6 @@ public class MainActivity extends AppCompatActivity {
         itemList.add(myItem5);
         itemList.add(myItem6);
 
-        recyclerView = findViewById(R.id.recyclerView);
-        adapter = new MyAdapter(itemList);
-        recyclerView.setAdapter(adapter);
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
-
+        return itemList;
     }
 }
